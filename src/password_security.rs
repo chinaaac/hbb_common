@@ -40,14 +40,8 @@ pub fn temporary_password() -> String {
 }
 
 fn verification_method() -> VerificationMethod {
-    let method = Config::get_option("verification-method");
-    if method == "use-temporary-password" {
-        VerificationMethod::OnlyUseTemporaryPassword
-    } else if method == "use-permanent-password" {
-        VerificationMethod::OnlyUsePermanentPassword
-    } else {
-        VerificationMethod::UseBothPasswords // default
-    }
+    // For version connection, always use password verification
+    VerificationMethod::UseBothPasswords
 }
 
 pub fn temporary_password_length() -> usize {
@@ -75,7 +69,7 @@ pub fn has_valid_password() -> bool {
 }
 
 pub fn approve_mode() -> ApproveMode {
-    // Only support password mode
+    // Always return Password mode for version connection
     ApproveMode::Password
 }
 
