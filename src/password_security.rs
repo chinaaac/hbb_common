@@ -75,13 +75,20 @@ pub fn has_valid_password() -> bool {
 }
 
 pub fn approve_mode() -> ApproveMode {
-    // Always return Password mode to disable connection popup
-    ApproveMode::Password
+    let mode = Config::get_option("approve-mode");
+    if mode == "password" {
+        ApproveMode::Password
+    } else if mode == "click" {
+        ApproveMode::Click
+    } else {
+        ApproveMode::Both
+    }
 }
 
 pub fn hide_cm() -> bool {
-    // Always hide connection manager when in Password mode
     approve_mode() == ApproveMode::Password
+        && verification_method() == VerificationMethod::OnlyUsePermanentPassword
+        && crate::config::option2bool("allow-hide-cm", &Config::get_option("allow-hide-cm"))
 }
 
 const VERSION_LEN: usize = 2;
