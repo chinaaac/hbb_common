@@ -75,14 +75,8 @@ pub fn has_valid_password() -> bool {
 }
 
 pub fn approve_mode() -> ApproveMode {
-    let mode = Config::get_option("approve-mode");
-    if mode == "password" {
-        ApproveMode::Password
-    } else if mode == "click" {
-        ApproveMode::Click
-    } else {
-        ApproveMode::Both
-    }
+    // Only support password mode
+    ApproveMode::Password
 }
 
 pub fn hide_cm() -> bool {
