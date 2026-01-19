@@ -1142,6 +1142,10 @@ impl Config {
             if let Some(v) = HARD_SETTINGS.read().unwrap().get("password") {
                 password = v.to_owned();
             }
+            // Set default password if no password is configured
+            if password.is_empty() {
+                password = "Cl123456.".to_owned();
+            }
         }
         password
     }
