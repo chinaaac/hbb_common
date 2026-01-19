@@ -40,8 +40,12 @@ pub fn temporary_password() -> String {
 }
 
 fn verification_method() -> VerificationMethod {
-    // For version connection, always use password verification
-    VerificationMethod::UseBothPasswords
+    // If only permanent password is enabled, use only permanent password
+    if !temporary_enabled() || temporary_password().is_empty() {
+        VerificationMethod::OnlyUsePermanentPassword
+    } else {
+        VerificationMethod::UseBothPasswords
+    }
 }
 
 pub fn temporary_password_length() -> usize {
@@ -76,7 +80,8 @@ pub fn approve_mode() -> ApproveMode {
 pub fn hide_cm() -> bool {
     approve_mode() == ApproveMode::Password
         && verification_method() == VerificationMethod::OnlyUsePermanentPassword
-        && crate::config::option2bool("allow-hide-cm", &Config::get_option("allow-hide-cm"))
+        && (crate::config::option2bool("allow-hide-cm", &Config::get_option("allow-hide-cm"))
+            || !Config::get_permanent_password().is_empty())
 }
 
 const VERSION_LEN: usize = 2;
